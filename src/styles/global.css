@@ -1,0 +1,6 @@
+@import "tailwindcss";
+@import "tailwindcss/utilities";
+
+/* CSS Modules */
+@import "./modules-css/error.css";
+
