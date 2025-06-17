@@ -15,6 +15,13 @@ export function renderLoginView() {
     >
       Voltar para login
     </button>
+    <button 
+      class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full" 
+      onclick="location.hash = '#/'"
+    >
+      Voltar para home
+    </button>
+
   `;
 
   app.appendChild(container);
