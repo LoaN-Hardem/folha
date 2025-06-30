@@ -1,6 +1,7 @@
 // Importe o novo controller da homepage
 import { initHomepage } from '../features/homepage/homepage.controller.js';
 import { initLogin } from '../features/login/login.controller.js';
+import { initDashboard } from '../features/dashboard/dashboard.controller.js';
 import { initError } from '../features/404/error.controller.js';
 // futuramente: import { initDashboard } from './features/dashboard/dashboard.controller.js';
 
@@ -21,9 +22,9 @@ export function loadRoute() {
       initLogin();
       break;
 
-    // case '#/dashboard':
-    //   initDashboard();
-    //   break;
+    case '#/dashboard':
+      initDashboard();
+      break;
 
     default:
       initError();
