@@ -1,4 +1,4 @@
-export function renderLoginView() {
+export function renderErrorView() {
   const app = document.getElementById('app');
 
   
