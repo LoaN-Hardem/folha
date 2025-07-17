@@ -2,6 +2,7 @@
 
 import { renderDashboardView } from './dashboard.view.js';
 import { renderDashboardHomeView } from './views/home/home.view.js';
+import { initObjetos } from './views/objetos/objetos.controller.js';
 // Futuramente: import { renderAccountsView } from './views/accounts/accounts.view.js';
 
 /**
@@ -27,8 +28,7 @@ function loadDashboardContent(viewName) {
       content.innerHTML = '<h1 class="text-2xl font-bold">Página de Contas (Em Construção)</h1>';
       break;
     case 'objects':
-      const objects = document.getElementById('dashboard-content');
-      objects.innerHTML = '<h1 class="text-2xl font-bold">Página de Objetos (Em Construção)</h1>';
+      initObjetos();
       break;
     default:
       renderDashboardHomeView();
