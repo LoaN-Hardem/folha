@@ -26,6 +26,10 @@ function loadDashboardContent(viewName) {
       const content = document.getElementById('dashboard-content');
       content.innerHTML = '<h1 class="text-2xl font-bold">Página de Contas (Em Construção)</h1>';
       break;
+    case 'objects':
+      const objects = document.getElementById('dashboard-content');
+      objects.innerHTML = '<h1 class="text-2xl font-bold">Página de Objetos (Em Construção)</h1>';
+      break;
     default:
       renderDashboardHomeView();
   }
@@ -47,7 +51,7 @@ function addDashboardLogic() {
   });
 
   if (window.innerWidth < 768) {
-      menuToggleButton.click();
+    menuToggleButton.click();
   }
 
   // --- LÓGICA PARA NAVEGAÇÃO INTERNA DO DASHBOARD ---
@@ -72,14 +76,14 @@ function addDashboardLogic() {
     logoutPopup.classList.remove('hidden');
     logoutPopup.classList.add('flex');
     setTimeout(() => {
-        popupContent.classList.remove('scale-95', 'opacity-0');
-        popupContent.classList.add('scale-100', 'opacity-100');
+      popupContent.classList.remove('scale-95', 'opacity-0');
+      popupContent.classList.add('scale-100', 'opacity-100');
     }, 10);
   });
 
   cancelBtn.addEventListener('click', () => {
-     popupContent.classList.add('scale-95', 'opacity-0');
-     setTimeout(() => logoutPopup.classList.add('hidden'), 200);
+    popupContent.classList.add('scale-95', 'opacity-0');
+    setTimeout(() => logoutPopup.classList.add('hidden'), 200);
   });
 
   confirmBtn.addEventListener('click', () => {
