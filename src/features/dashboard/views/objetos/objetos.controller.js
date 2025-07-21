@@ -28,15 +28,27 @@ function showCreateObjetoModal() {
 }
 
 /**
- * Manipula o salvamento do novo objeto.
+ * Manipula o salvamento do novo objeto, incluindo a conversão da foto.
  * @param {string} nomeObjeto - O nome do objeto a ser salvo.
+ * @param {File|null} arquivoFoto - O arquivo de imagem do input.
  */
-function handleSaveObjeto(nomeObjeto) {
-    if (nomeObjeto) {
-        saveObjeto(nomeObjeto);
-        // Após salvar, renderiza a view principal novamente para mostrar a lista atualizada
-        renderObjetosView();
-        // Re-adiciona o evento ao botão (já que o innerHTML foi reescrito)
-        document.getElementById('create-objeto-btn').addEventListener('click', showCreateObjetoModal);
+function handleSaveObjeto(nomeObjeto, arquivoFoto) {
+    if (!nomeObjeto) return;
+
+    // Se não houver foto, salva diretamente com null
+    if (!arquivoFoto) {
+        saveObjeto(nomeObjeto, null);
+        initObjetos(); // Re-renderiza a página de objetos
+        return;
     }
+
+    // Se houver uma foto, converte para Base64 primeiro
+    const reader = new FileReader();
+    reader.onloadend = () => {
+        // reader.result contém a string Base64 da imagem
+        const fotoUrl = reader.result;
+        saveObjeto(nomeObjeto, fotoUrl);
+        initObjetos(); // Re-renderiza a página após o salvamento
+    };
+    reader.readAsDataURL(arquivoFoto);
 }

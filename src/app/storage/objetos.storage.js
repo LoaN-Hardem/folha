@@ -1,7 +1,3 @@
-/**
- * Onde os objetos gerenciáveis são armazenados no LocalStorage.
- * @type {string}
- */
 const STORAGE_KEY = 'folha_objetos';
 
 /**
@@ -16,14 +12,16 @@ export function getObjetos() {
 /**
  * Salva um novo objeto gerenciável no LocalStorage.
  * @param {string} nome - O nome do objeto a ser criado.
+ * @param {string|null} fotoUrl - A URL da foto em Base64, ou null.
  */
-export function saveObjeto(nome) {
+export function saveObjeto(nome, fotoUrl = null) {
     const objetos = getObjetos();
 
     const novoObjeto = {
-        id: `obj_${new Date().getTime()}`, // Gera um ID único baseado no timestamp
+        id: `obj_${new Date().getTime()}`,
         nome: nome,
-        contas: [], // Lista de contas começa vazia
+        fotoUrl: fotoUrl, // Salva a URL da foto
+        contas: [],
         criadoEm: new Date().toISOString()
     };
 
