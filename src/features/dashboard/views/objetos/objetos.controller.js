@@ -57,9 +57,9 @@ function showDeleteObjetoModal(objeto) {
  * @param {Object} objeto
  */
 function handleManageObjeto(objeto) {
-    console.log(`Gerenciando o objeto: ${objeto.nome} (ID: ${objeto.id})`);
     // Futuramente, aqui será chamada a função para navegar para a tela de gerenciamento
     // Ex: location.hash = `#/dashboard/objetos/${objeto.id}`;
+    location.hash = `#/dashboard/objetos/${objeto.id}`;
 }
 
 /**

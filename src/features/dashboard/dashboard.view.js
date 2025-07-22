@@ -2,7 +2,7 @@
  * Renderiza a interface principal do dashboard, incluindo o menu lateral,
  * a navbar e a área de conteúdo inicial.
  */
-export function renderDashboardView() {
+export function rendeDashboardView() {
   const app = document.getElementById('app');
   app.innerHTML = '';
   app.className = 'bg-gray-100';

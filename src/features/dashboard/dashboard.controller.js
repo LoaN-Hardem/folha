@@ -4,6 +4,8 @@ import { renderDashboardView } from './dashboard.view.js';
 import { renderDashboardHomeView } from './views/home/home.view.js';
 import { initObjetos } from './views/objetos/objetos.controller.js';
 // Futuramente: import { renderAccountsView } from './views/accounts/accounts.view.js';
+import { initGerenciarObjeto } from './views/objetos/gerenciar-objeto.controller.js';
+
 
 /**
  * Carrega o conteúdo de uma sub-view específica dentro do layout do dashboard.
@@ -183,14 +185,32 @@ function addDashboardLogic() {
 
 /**
  * Inicializa a feature do Dashboard.
+ * @param {Object} routeParams - Parâmetros da rota vindos do router.js
  */
-export function initDashboard() {
-  // 1. Renderiza a "casca" principal (layout)
-  renderDashboardView();
+export function initDashboard(routeParams = {}) {
+  // Renderiza a "casca" principal (layout) apenas uma vez
+  if (!document.getElementById('sidebar')) {
+    renderDashboardView();
+    addDashboardLogic(); // Adiciona a lógica do menu, etc.
+  }
 
-  // 2. Carrega o conteúdo padrão (a home do dashboard)
-  loadDashboardContent('home');
+  // Decide qual sub-view carregar com base nos parâmetros da rota
+  const { view, id } = routeParams;
 
-  // 3. Adiciona TODA a lógica de interatividade de uma só vez
-  addDashboardLogic();
+  if (view === 'objetos' && id) {
+    // Carrega a tela de gerenciamento de um objeto específico
+    initGerenciarObjeto({ id });
+  } else if (view === 'objetos') {
+    // Carrega a lista de todos os objetos
+    initObjetos();
+  } else if (view === 'contas') {
+    // Carrega a página de contas (ainda em construção)
+    loadAccountsView();
+  } else {
+    // Caso padrão: carrega a home do dashboard
+    renderDashboardHomeView();
+  }
+
+  // Atualiza o link ativo no menu
+  updateActiveNavLink(view || 'home');
 }
