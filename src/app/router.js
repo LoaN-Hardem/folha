@@ -1,7 +1,7 @@
 // Importações
 import { initHomepage } from '../features/homepage/homepage.controller.js';
 import { initLogin } from '../features/login/login.controller.js';
-import { initDashboard } from '../features/dashboard/dashboard.controller.js';
+import { initDashboard } from '../features/dashboard/controllers/dashboard.controller.js';
 import { initError } from '../features/404/error.controller.js';
 
 // Mapa de rotas que o roteador vai usar

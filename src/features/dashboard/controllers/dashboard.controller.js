@@ -1,7 +1,7 @@
-import { renderDashboardView } from './dashboard.view.js';
-import { renderDashboardHomeView } from './views/home/home.view.js';
-import { initObjetos } from './views/objetos/objetos.controller.js';
-import { initGerenciarObjeto } from './views/objetos/gerenciar-objeto.controller.js';
+import { renderDashboardView } from '../dashboard.view.js';
+import { renderDashboardHomeView } from '../views/home/home.view.js';
+import { initObjetos } from '../controllers/objetos.controller.js';
+import { initGerenciarObjeto } from '../controllers/gerenciar-objeto.controller.js';
 
 /**
  * Adiciona a lógica de interatividade do menu, popups, etc.

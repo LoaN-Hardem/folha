@@ -1,7 +1,7 @@
-import { renderObjetosView } from '../objetos/objetos.view.js';
-import { renderCreateObjetoModal, addModalEventListeners as addCreateModalListeners } from '../objetos/create-objeto-modal.view.js';
-import { renderDeleteObjetoModal, addDeleteModalEventListeners } from '../objetos/delete-objeto-modal.view.js';
-import { saveObjeto, getObjetos, deleteObjeto } from '../../../../app/storage/objetos.storage.js';
+import { renderObjetosView } from '../views/objetos/objetos.view.js';
+import { renderCreateObjetoModal, addModalEventListeners as addCreateModalListeners } from '../views/objetos/create-objeto-modal.view.js';
+import { renderDeleteObjetoModal, addDeleteModalEventListeners } from '../views/objetos/delete-objeto-modal.view.js';
+import { saveObjeto, getObjetos, deleteObjeto } from '../../../app/storage/objetos.storage.js';
 
 /**
  * Inicializa a página de gerenciamento de Objetos.
