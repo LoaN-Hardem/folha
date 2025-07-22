@@ -1,5 +1,5 @@
 import { renderGerenciarObjetoView } from '../objetos/gerenciar-objeto.view.js';
-import { getObjetos } from '../../../app/storage/objetos.storage.js';
+import { getObjetos } from '../../../../app/storage/objetos.storage.js';
 
 /**
  * Inicializa a página de gerenciamento de um objeto específico.
