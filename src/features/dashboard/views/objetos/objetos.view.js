@@ -14,7 +14,7 @@ export function renderObjetosView() {
       <div class="sm:flex sm:items-center sm:justify-between">
         <h2 class="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">Meus Objetos</h2>
         <div class="mt-4 sm:mt-0">
-          <button type="button" id="create-objeto-btn" class="block w-full rounded-lg bg-indigo-600 px-5 py-3 text-sm font-medium text-white transition hover:bg-indigo-700 focus:outline-none focus:ring">
+          <button type="button" id="create-objeto-btn" class="block w-full rounded-lg bg-indigo-600 px-5 py-3 text-sm font-medium text-white transition hover:bg-indigo-800 focus:outline-none focus:ring hover:cursor-pointer">
             Criar novo objeto
           </button>
         </div>
@@ -33,25 +33,31 @@ export function renderObjetosView() {
  * @returns {string} O HTML do card.
  */
 function renderObjetoCard(objeto) {
+  // Simulação do saldo total, já que ainda não temos as contas.
+  // No futuro, este valor virá de um cálculo real.
+  const saldoTotal = "R$ 0,00";
+
+  // Lógica para criar o avatar (foto ou iniciais)
   const avatarHtml = objeto.fotoUrl
-    ? `<img src="${objeto.fotoUrl}" class="w-16 h-16 rounded-full object-cover">`
-    : `<div class="w-16 h-16 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 font-bold text-2xl">
+    ? `<img src="${objeto.fotoUrl}" class="w-24 h-24 md:w-32 md:h-32 rounded-full object-cover border-4 border-white shadow-md">`
+    : `<div class="w-24 h-24 md:w-32 md:h-32 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 font-bold text-4xl border-4 border-white shadow-md">
          ${objeto.nome.substring(0, 2).toUpperCase()}
        </div>`;
 
   return `
-    <div class="bg-white p-5 rounded-2xl shadow-md hover:shadow-lg transition-shadow flex items-center gap-4">
-      <div class="flex-shrink-0">
-        ${avatarHtml}
-      </div>
-      <div class="flex-grow">
-        <h3 class="text-xl font-bold text-gray-800 truncate">${objeto.nome}</h3>
-        <p class="text-sm text-gray-500 mt-1">Contas: ${objeto.contas.length}</p>
-        <div class="mt-3 space-x-4">
-           <button class="text-white font-semibold text-sm bg-blue-500 hover:bg-blue-600 py-2 px-4 rounded-full">Gerenciar</button>
-           <button id="delete-objeto-${objeto.id}" class="text-white bg-red-500 hover:bg-red-700 font-semibold text-sm py-2 px-4 rounded-full">Excluir</button>
+    <div id="objeto-${objeto.id}" class="bg-white p-6 rounded-2xl shadow-md hover:shadow-xl transition-shadow transform hover:-translate-y-1 flex flex-col items-center text-center">
+        <div class="mb-4">
+          ${avatarHtml}
         </div>
-      </div>
+        <h3 class="text-xl font-bold text-gray-900 truncate w-full">${objeto.nome}</h3>
+        <div class="my-2">
+        <p class="text-sm text-gray-500">Saldo Total</p>
+        <p class="text-2xl font-bold text-green-600">${saldoTotal}</p>
+        </div>
+        <div class="mt-4 w-full flex flex-col space-y-2">
+         <button class="manage-btn w-full text-white font-semibold text-base bg-indigo-600 hover:bg-indigo-800 py-2 px-4 rounded-lg transition-colors hover:cursor-pointer">Gerenciar</button>
+         <button class="delete-btn w-full text-gray-700 bg-gray-200 hover:bg-gray-300 font-semibold text-base py-2 px-4 rounded-lg transition-colors hover:cursor-pointer">Excluir</button>
+        </div>
     </div>
   `;
 }

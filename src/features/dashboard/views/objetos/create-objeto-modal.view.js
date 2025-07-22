@@ -4,7 +4,7 @@
 export function renderCreateObjetoModal() {
   const modalContainer = document.createElement('div');
   modalContainer.id = 'create-objeto-modal';
-  modalContainer.className = 'fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full flex items-center justify-center z-50';
+  modalContainer.className = 'fixed inset-0 bg-gray-100 bg-opacity-50 overflow-y-auto h-full w-full flex items-center justify-center z-50';
 
   modalContainer.innerHTML = `
     <div class="relative mx-auto p-8 border w-full max-w-md shadow-lg rounded-2xl bg-white">

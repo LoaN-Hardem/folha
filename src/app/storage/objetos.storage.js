@@ -28,3 +28,13 @@ export function saveObjeto(nome, fotoUrl = null) {
     objetos.push(novoObjeto);
     localStorage.setItem(STORAGE_KEY, JSON.stringify(objetos));
 }
+
+/**
+ * Exclui um objeto gerenciável do LocalStorage pelo seu ID.
+ * @param {string} objetoId - O ID do objeto a ser excluído.
+ */
+export function deleteObjeto(objetoId) {
+    let objetos = getObjetos();
+    objetos = objetos.filter(objeto => objeto.id !== objetoId);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(objetos));
+}
