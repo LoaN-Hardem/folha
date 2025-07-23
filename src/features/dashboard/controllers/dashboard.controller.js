@@ -2,6 +2,7 @@ import { renderDashboardView } from '../dashboard.view.js';
 import { renderDashboardHomeView } from '../views/home/home.view.js';
 import { initObjetos } from '../controllers/objetos.controller.js';
 import { initGerenciarObjeto } from '../controllers/gerenciar-objeto.controller.js';
+import { initAccounts } from '../controllers/accounts.controller.js';
 
 /**
  * Adiciona a lógica de interatividade do menu, popups, etc.
@@ -109,6 +110,9 @@ export function initDashboard(routeParams = {}) {
   } else if (view === 'objetos') {
     initObjetos();
     currentView = 'objetos';
+  } else if (view === 'accounts') {
+    initAccounts();
+    currentView = 'accounts';
   } else {
     renderDashboardHomeView();
     currentView = 'home';

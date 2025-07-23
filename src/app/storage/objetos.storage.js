@@ -38,3 +38,33 @@ export function deleteObjeto(objetoId) {
     objetos = objetos.filter(objeto => objeto.id !== objetoId);
     localStorage.setItem(STORAGE_KEY, JSON.stringify(objetos));
 }
+
+
+/**
+ * Adiciona uma nova conta a um objeto gerenciável específico.
+ * @param {string} objetoId - O ID do objeto ao qual a conta será adicionada.
+ * @param {Object} dadosConta - Os dados da nova conta.
+ */
+export function addConta(objetoId, dadosConta) {
+    const objetos = getObjetos();
+    const objetoIndex = objetos.findIndex(obj => obj.id === objetoId);
+
+    if (objetoIndex === -1) {
+        console.error("Objeto não encontrado para adicionar a conta.");
+        return;
+    }
+
+    // Garante que o array de contas exista
+    if (!objetos[objetoIndex].contas) {
+        objetos[objetoIndex].contas = [];
+    }
+
+    // Cria a nova conta com um ID único
+    const novaConta = {
+        id: `cta_${new Date().getTime()}`,
+        ...dadosConta
+    };
+
+    objetos[objetoIndex].contas.push(novaConta);
+    localStorage.setItem('folha_objetos', JSON.stringify(objetos));
+}
