@@ -14,7 +14,6 @@ const PALAVRAS_PARA_EXCLUIR = [
     'SCD',      // Sociedade de Crédito Direto
     'SEFISA',
     'PAGAMENTO S.A',
-    'CORRETORA',
     'FINANCEIRA'
 ];
 
