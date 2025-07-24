@@ -1,5 +1,7 @@
 import { renderGerenciarObjetoView } from '../views/objetos/gerenciar-objeto.view.js';
 import { getObjetos } from '../../../app/storage/objetos.storage.js';
+import { getBancos } from '../../../app/services/bank.service.js';
+import { showAddAccountModal } from './accounts.controller.js';
 
 /**
  * Inicializa a página de gerenciamento de um objeto específico.
@@ -35,10 +37,12 @@ export function initGerenciarObjeto(params) {
     renderGerenciarObjetoView(objetoAtual, saldoTotal);
 
     // Aqui adicionaremos a lógica dos botões "Adicionar Conta", "Receita", "Despesa"
-    addEventListeners();
+    addEventListeners(objetoAtual.id);
 }
 
-function addEventListeners() {
-    // Futura lógica dos botões da página
-    console.log("Listeners da página de gerenciamento prontos.");
+function addEventListeners(objetoId) { // A função agora recebe o ID do objeto
+    const addAccountBtn = document.querySelector('#contas-list + .bg-indigo-600, .lg\\:col-span-1 .bg-indigo-600'); // Seletor mais robusto
+    addAccountBtn?.addEventListener('click', () => {
+        showAddAccountModal(objetoId); // <-- PASSA O ID AQUI
+    });
 }
