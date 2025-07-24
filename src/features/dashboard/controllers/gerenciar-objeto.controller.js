@@ -37,12 +37,12 @@ export function initGerenciarObjeto(params) {
     renderGerenciarObjetoView(objetoAtual, saldoTotal);
 
     // Aqui adicionaremos a lógica dos botões "Adicionar Conta", "Receita", "Despesa"
-    addEventListeners(objetoAtual.id);
+    addEventListeners(objetoAtual);
 }
 
-function addEventListeners(objetoId) { // A função agora recebe o ID do objeto
+function addEventListeners(objeto) { // A função agora recebe o ID do objeto
     const addAccountBtn = document.querySelector('#contas-list + .bg-indigo-600, .lg\\:col-span-1 .bg-indigo-600'); // Seletor mais robusto
     addAccountBtn?.addEventListener('click', () => {
-        showAddAccountModal(objetoId); // <-- PASSA O ID AQUI
+        showAddAccountModal(objeto); // <-- PASSA O ID AQUI
     });
 }

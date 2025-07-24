@@ -1,23 +1,21 @@
 const BRASIL_API_URL = 'https://brasilapi.com.br/api/banks/v1';
 const LOCAL_LOGOS_URL = '/api/logo.json';
 
-// --- NOSSA "LISTA VIP" DE BANCOS PRINCIPAIS ---
-// Apenas os bancos cujos códigos estão nesta lista serão exibidos.
-const BANCOS_PRINCIPAIS_CODES = [
-    '001', // Banco do Brasil
-    '033', // Santander
-    '077', // Inter
-    '102', // XP Investimentos
-    '104', // Caixa Econômica Federal
-    '208', // BTG Pactual
-    '237', // Bradesco
-    '260', // Nubank
-    '290', // PagBank
-    '336', // C6 Bank
-    '341', // Itaú
-    '422', // Safra
-    '735', // Neon
-    '746', // Modalmais
+// --- NOVA LÓGICA: LISTA DE EXCLUSÃO ---
+// Instituições cujos nomes contêm estas palavras geralmente não são
+// o que o usuário procura como "banco" principal.
+const PALAVRAS_PARA_EXCLUIR = [
+    'S.A. CFI', // S.A. Crédito, Financiamento e Investimento
+    'S.A. SCFI',
+    'DTVM',     // Distribuidora de Títulos e Valores Mobiliários
+    'S.A. C.I.',
+    'S.A. DE CREDITO',
+    'SCC',      // Sociedade de Crédito ao Microempreendedor
+    'SCD',      // Sociedade de Crédito Direto
+    'SEFISA',
+    'PAGAMENTO S.A',
+    'CORRETORA',
+    'FINANCEIRA'
 ];
 
 /**
@@ -38,25 +36,33 @@ export async function getBancos() {
         const todosOsBancos = await bancosResponse.json();
         const logosMap = await logosResponse.json();
 
-        // --- NOVA LÓGICA DE CURADORIA ---
-        // 1. Filtra a lista da API para manter apenas os bancos da nossa "lista VIP".
-        const bancosPrincipais = todosOsBancos.filter(banco =>
-            BANCOS_PRINCIPAIS_CODES.includes(banco.code)
-        );
+        // --- NOVA LÓGICA DE FILTRAGEM ---
+        const bancosFiltrados = todosOsBancos.filter(banco => {
+            // Condição 1: O banco precisa ter um nome.
+            if (!banco.name) {
+                return false;
+            }
 
-        // 2. Enriquecimento: Adiciona a propriedade 'logo' a cada banco da nossa lista.
-        const bancosEnriquecidos = bancosPrincipais.map(banco => ({
+            const nomeEmMaiusculo = banco.name.toUpperCase();
+
+            // Condição 2: O nome do banco NÃO PODE conter nenhuma das palavras da nossa lista de exclusão.
+            // O método .some() verifica se pelo menos um item na lista de exclusão satisfaz a condição.
+            const contemPalavraExcluida = PALAVRAS_PARA_EXCLUIR.some(palavra => nomeEmMaiusculo.includes(palavra));
+
+            return !contemPalavraExcluida; // Retorna true apenas se NÃO contiver nenhuma palavra proibida.
+        });
+
+        const bancosEnriquecidos = bancosFiltrados.map(banco => ({
             ...banco,
             logo: logosMap[banco.code] || null
         }));
 
-        // 3. Ordena a lista final por nome.
         bancosEnriquecidos.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
 
         return bancosEnriquecidos;
 
     } catch (error) {
         console.error("Não foi possível buscar e processar a lista de bancos:", error);
-        return []; // Retorna uma lista vazia em caso de erro.
+        return [];
     }
 }
