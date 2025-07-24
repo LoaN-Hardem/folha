@@ -1,7 +1,7 @@
 import { getObjetos, addConta } from '../../../app/storage/objetos.storage.js';
 import { renderAccountsView } from '../views/accounts/accounts.view.js';
 import { getBancos } from '../../../app/services/bank.service.js';
-import { showModal } from '../../../components/Modal/Modal.js';
+import { showModal } from '../../../components/modal/modal.js';
 import { initGerenciarObjeto } from './gerenciar-objeto.controller.js';
 
 export function initAccounts() {
