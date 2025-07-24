@@ -22,8 +22,10 @@ export async function showAddAccountModal(selectedObjeto = null) {
     return;
   }
 
+  // Variável para armazenar o ID do objeto selecionado
+  let selectedObjetoId = selectedObjeto ? selectedObjeto.id : null;
+
   let objetoSelectorHtml;
-  // Contexto: Dentro da página de um objeto específico
   if (selectedObjeto) {
     const avatar = selectedObjeto.fotoUrl
       ? `<img src="${selectedObjeto.fotoUrl}" class="w-10 h-10 rounded-full object-cover">`
@@ -37,14 +39,12 @@ export async function showAddAccountModal(selectedObjeto = null) {
                 </div>
             </div>`;
   } else {
-    // Contexto: Na página geral de "Contas"
     objetoSelectorHtml = `
             <div class="relative">
                 <label for="objeto-filtro" class="block text-sm font-medium text-gray-700 mb-1">Objeto Gerenciável</label>
-                <input type="text" id="objeto-filtro" class="w-full px-4 py-3 border border-gray-300 rounded-lg" placeholder="Selecione ou digite para buscar...">
+                <input type="text" id="objeto-filtro" class="w-full px-4 py-3 border border-gray-300 rounded-lg" placeholder="Selecione ou digite para buscar..." autocomplete="off">
                 <input type="hidden" id="objeto-id-hidden">
-                <div id="objetos-dropdown" class="hidden absolute w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg z-20 max-h-60 overflow-y-auto">
-                    </div>
+                <div id="objetos-dropdown" class="hidden absolute w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg z-20 max-h-60 overflow-y-auto"></div>
             </div>`;
   }
 
@@ -88,15 +88,16 @@ export async function showAddAccountModal(selectedObjeto = null) {
       { id: 'cancel-add-account', text: 'Cancelar', type: 'secondary' },
       {
         id: 'save-add-account', text: 'Salvar Conta', type: 'primary', onClick: () => {
-          let objetoId;
-          const objetoStatic = document.querySelector('[data-objeto-id]');
-          if (objetoStatic) {
-            objetoId = objetoStatic.dataset.objetoId;
-          } else {
-            objetoId = document.getElementById('objeto-id-hidden').value;
+          // Usamos a variável selectedObjetoId que está no escopo da função
+          if (!selectedObjetoId) {
+            // Tenta obter do campo oculto se ainda estiver disponível
+            const objetoHiddenInput = document.getElementById('objeto-id-hidden');
+            if (objetoHiddenInput && objetoHiddenInput.value) {
+              selectedObjetoId = objetoHiddenInput.value;
+            }
           }
 
-          if (!objetoId) {
+          if (!selectedObjetoId) {
             alert('Por favor, selecione um Objeto Gerenciável.');
             return;
           }
@@ -104,6 +105,7 @@ export async function showAddAccountModal(selectedObjeto = null) {
           const dadosConta = {
             instituicao: document.getElementById('instituicao-filtro').value,
             agencia: document.getElementById('agencia-input').value.trim(),
+            nome: document.getElementById('instituicao-filtro').value.trim() || 'Nova Conta',
             numero: document.getElementById('conta-numero-input').value.trim(),
             saldo: parseFloat(document.getElementById('saldo-inicial-input').value) || 0,
             tipo: document.getElementById('tipo-conta-select').value,
@@ -114,21 +116,23 @@ export async function showAddAccountModal(selectedObjeto = null) {
             return;
           }
 
-          addConta(objetoId, dadosConta);
+          addConta(selectedObjetoId, dadosConta);
           modal.closeModal();
 
-          location.hash.includes('/objetos/') ? initGerenciarObjeto({ id: objetoId }) : initAccounts();
+          if (location.hash.includes('/objetos/')) {
+            initGerenciarObjeto({ id: selectedObjetoId });
+          } else {
+            initAccounts();
+          }
         }
       }
     ]
   });
 
-  // --- LÓGICA PARA AMBOS OS DROPDOWNS ---
-
-  // Lógica para o dropdown de Objetos (se existir)
+  // --- LÓGICA PARA DROPDOWNS ---
   const objetoFiltroInput = document.getElementById('objeto-filtro');
   const objetosDropdown = document.getElementById('objetos-dropdown');
-  if (objetoFiltroInput) {
+  if (objetoFiltroInput && objetosDropdown) {
     const renderObjetoOptions = (listaObjetos) => {
       if (listaObjetos.length === 0) {
         objetosDropdown.innerHTML = `<div class="p-4 text-sm text-gray-500">Nenhum objeto encontrado.</div>`;
@@ -157,7 +161,11 @@ export async function showAddAccountModal(selectedObjeto = null) {
       const item = e.target.closest('[data-objeto-id]');
       if (item) {
         objetoFiltroInput.value = item.dataset.objetoName;
-        document.getElementById('objeto-id-hidden').value = item.dataset.objetoId; // Guarda o ID no campo escondido
+        document.getElementById('objeto-id-hidden').value = item.dataset.objetoId;
+
+        // Atualiza a variável com o ID selecionado
+        selectedObjetoId = item.dataset.objetoId;
+
         objetosDropdown.classList.add('hidden');
       }
     });
@@ -201,7 +209,8 @@ export async function showAddAccountModal(selectedObjeto = null) {
   document.addEventListener('click', (e) => {
     const modalContent = document.querySelector('#reusable-modal > div');
     if (modalContent && !modalContent.contains(e.target)) {
-      dropdown.classList.add('hidden');
+      objetosDropdown?.classList.add('hidden');
+      dropdown?.classList.add('hidden');
     }
   }, { capture: true });
 }
