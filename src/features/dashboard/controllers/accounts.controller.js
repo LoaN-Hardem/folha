@@ -7,13 +7,13 @@ import { showModal } from '../../../components/Modal/Modal.js'; // Importa nosso
  * Inicializa a página de Contas.
  */
 export function initAccounts() {
-    const objetos = getObjetos();
-    renderAccountsView(objetos);
-    addEventListeners();
+  const objetos = getObjetos();
+  renderAccountsView(objetos);
+  addEventListeners();
 }
 
 function addEventListeners() {
-    document.getElementById('add-account-btn')?.addEventListener('click', showAddAccountModal);
+  document.getElementById('add-account-btn')?.addEventListener('click', showAddAccountModal);
 }
 
 /**
@@ -21,41 +21,42 @@ function addEventListeners() {
  * @param {string|null} selectedObjetoId - O ID do objeto que deve vir pré-selecionado.
  */
 export async function showAddAccountModal(selectedObjetoId = null) {
-    // Busca os dados em paralelo para mais eficiência
-    const [objetos, bancos] = await Promise.all([
-        getObjetos(),
-        getBancos()
-    ]);
+  const [objetos, bancos] = await Promise.all([
+    getObjetos(),
+    getBancos()
+  ]);
 
-    if (objetos.length === 0) {
-        showModal({ title: 'Aviso', content: '<p>Você precisa criar um Objeto Gerenciável antes de poder adicionar uma conta.</p>', actions: [{ id: 'ok-btn', text: 'Entendi', type: 'primary' }] });
-        return;
-    }
+  if (objetos.length === 0) {
+    showModal({ title: 'Aviso', content: '<p>Você precisa criar um Objeto Gerenciável antes de poder adicionar uma conta.</p>', actions: [{ id: 'ok-btn', text: 'Entendi', type: 'primary' }] });
+    return;
+  }
 
-    // Gera as opções para os <select>s
-    const objetosOptions = objetos.map(obj => `<option value="${obj.id}" ${obj.id === selectedObjetoId ? 'selected' : ''}>${obj.nome}</option>`).join('');
-    const bancosOptions = bancos.map(banco => `<option value="${banco.name}">${banco.name}</option>`).join('');
+  const objetosOptions = objetos.map(obj => `<option value="${obj.id}" ${obj.id === selectedObjetoId ? 'selected' : ''}>${obj.nome}</option>`).join('');
 
-    const contentHtml = `
+  const contentHtml = `
     <div class="space-y-4 text-left">
       <div>
         <label for="objeto-select" class="block text-sm font-medium text-gray-700 mb-1">Objeto Gerenciável</label>
-        <select id="objeto-select" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" ${selectedObjetoId ? 'disabled' : ''}>
+        <select id="objeto-select" class="w-full px-4 py-3 border border-gray-300 rounded-lg" ${selectedObjetoId ? 'disabled' : ''}>
           ${objetosOptions}
         </select>
       </div>
 
-      <div>
-        <label for="instituicao-select" class="block text-sm font-medium text-gray-700 mb-1">Instituição</label>
-        <select id="instituicao-select" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
-          <option value="">Selecione um banco...</option>
-          ${bancosOptions}
-        </select>
+      <div class="relative">
+        <label for="instituicao-filtro" class="block text-sm font-medium text-gray-700 mb-1">Instituição</label>
+        <input type="text" id="instituicao-filtro" class="w-full px-4 py-3 border border-gray-300 rounded-lg" placeholder="Selecione ou digite para buscar...">
+        <div id="bancos-dropdown" class="hidden absolute w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg z-10 max-h-60 overflow-y-auto"></div>
       </div>
 
-      <div>
-        <label for="conta-nome-input" class="block text-sm font-medium text-gray-700 mb-1">Nome da Conta</label>
-        <input type="text" id="conta-nome-input" class="w-full px-4 py-3 border border-gray-300 rounded-lg" placeholder="Ex: Conta Corrente, Poupança">
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label for="agencia-input" class="block text-sm font-medium text-gray-700 mb-1">Nº da Agência</label>
+          <input type="text" id="agencia-input" class="w-full px-4 py-3 border border-gray-300 rounded-lg" placeholder="Ex: 0001">
+        </div>
+        <div>
+          <label for="conta-numero-input" class="block text-sm font-medium text-gray-700 mb-1">Nº da Conta</label>
+          <input type="text" id="conta-numero-input" class="w-full px-4 py-3 border border-gray-300 rounded-lg" placeholder="Ex: 12345-6">
+        </div>
       </div>
       
       <div>
@@ -75,33 +76,85 @@ export async function showAddAccountModal(selectedObjetoId = null) {
     </div>
   `;
 
-    const modal = showModal({
-        title: 'Adicionar Nova Conta',
-        content: contentHtml,
-        actions: [
-            { id: 'cancel-add-account', text: 'Cancelar', type: 'secondary' },
-            {
-                id: 'save-add-account', text: 'Salvar Conta', type: 'primary', onClick: () => {
-                    // Coleta dos dados do formulário
-                    const objetoId = document.getElementById('objeto-select').value;
-                    const dadosConta = {
-                        instituicao: document.getElementById('instituicao-select').value,
-                        nome: document.getElementById('conta-nome-input').value.trim(),
-                        saldo: parseFloat(document.getElementById('saldo-inicial-input').value) || 0,
-                        tipo: document.getElementById('tipo-conta-select').value,
-                    };
+  const modal = showModal({
+    title: 'Adicionar Nova Conta',
+    content: contentHtml,
+    actions: [
+      { id: 'cancel-add-account', text: 'Cancelar', type: 'secondary' },
+      {
+        id: 'save-add-account', text: 'Salvar Conta', type: 'primary', onClick: () => {
+          const objetoId = document.getElementById('objeto-select').value;
+          const dadosConta = {
+            instituicao: document.getElementById('instituicao-filtro').value,
+            agencia: document.getElementById('agencia-input').value.trim(),
+            numero: document.getElementById('conta-numero-input').value.trim(),
+            saldo: parseFloat(document.getElementById('saldo-inicial-input').value) || 0,
+            tipo: document.getElementById('tipo-conta-select').value,
+          };
 
-                    // Validação simples
-                    if (!dadosConta.instituicao || !dadosConta.nome) {
-                        alert('Por favor, preencha a Instituição e o Nome da Conta.');
-                        return;
-                    }
+          if (!dadosConta.instituicao || !dadosConta.numero) {
+            alert('Por favor, selecione uma Instituição e preencha o Número da Conta.');
+            return;
+          }
 
-                    addConta(objetoId, dadosConta);
-                    modal.closeModal();
-                    initAccounts(); // Atualiza a lista de contas na tela
-                }
-            }
-        ]
-    });
+          addConta(objetoId, dadosConta);
+          modal.closeModal();
+
+          location.hash.includes('objetos/') ? initGerenciarObjeto({ id: objetoId }) : initAccounts();
+        }
+      }
+    ]
+  });
+
+  // --- LÓGICA DO DROPDOWN DINÂMICO ---
+  const filtroInput = document.getElementById('instituicao-filtro');
+  const dropdown = document.getElementById('bancos-dropdown');
+
+  const renderDropdownOptions = (listaBancos) => {
+    if (listaBancos.length === 0) {
+      dropdown.innerHTML = `<div class="p-4 text-sm text-gray-500">Nenhum banco encontrado.</div>`;
+      return;
+    }
+    dropdown.innerHTML = listaBancos.map(banco => {
+      // LÓGICA DO FALLBACK: Se tiver logo, usa <img>. Senão, usa <div> com iniciais.
+      const avatar = banco.logo
+        ? `<img src="${banco.logo}" class="w-8 h-8 object-contain" alt="${banco.name}">`
+        : `<div class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-gray-600 font-bold text-xs">
+                     ${(banco.name || '').split(' ').map(n => n[0]).slice(0, 2).join('')}
+                   </div>`;
+
+      return `
+                <div class="flex items-center gap-3 p-3 hover:bg-indigo-50 cursor-pointer" data-banco-name="${banco.name}">
+                    ${avatar}
+                    <span class="text-gray-700">${banco.name}</span>
+                </div>
+            `;
+    }).join('');
+  };
+
+  filtroInput.addEventListener('focus', () => {
+    renderDropdownOptions(bancos);
+    dropdown.classList.remove('hidden');
+  });
+
+  filtroInput.addEventListener('input', (e) => {
+    const termo = e.target.value.toLowerCase();
+    const bancosFiltrados = bancos.filter(banco => (banco.name || '').toLowerCase().includes(termo));
+    renderDropdownOptions(bancosFiltrados);
+  });
+
+  dropdown.addEventListener('click', (e) => {
+    const item = e.target.closest('[data-banco-name]');
+    if (item) {
+      filtroInput.value = item.dataset.bancoName;
+      dropdown.classList.add('hidden');
+    }
+  });
+
+  document.addEventListener('click', (e) => {
+    const modalContent = document.querySelector('#reusable-modal > div');
+    if (modalContent && !modalContent.contains(e.target)) {
+      dropdown.classList.add('hidden');
+    }
+  });
 }
