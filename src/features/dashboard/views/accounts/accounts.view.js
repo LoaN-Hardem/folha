@@ -3,17 +3,20 @@
  * @param {Array<Object>} objetos - A lista completa de objetos gerenciáveis.
  */
 export function renderAccountsView(objetos) {
-    const dashboardContent = document.getElementById('dashboard-content');
-    if (!dashboardContent) return;
+  const dashboardContent = document.getElementById('dashboard-content');
+  if (!dashboardContent) return;
 
-    const accountsByObjectHtml = objetos.map(objeto => {
-        // Se um objeto não tiver contas, não o exibimos na lista.
-        if (!objeto.contas || objeto.contas.length === 0) {
-            return '';
-        }
+  const accountsByObjectHtml = objetos.map(objeto => {
+    // Se um objeto não tiver contas, não o exibimos na lista.
+    if (!objeto.contas || objeto.contas.length === 0) {
+      return '';
+    }
 
-        const contasHtml = objeto.contas.map(conta => `
-      <li class="flex items-center justify-between p-4 border-t border-gray-200">
+    // Em: src/features/dashboard/views/accounts/accounts.view.js
+
+    const contasHtml = objeto.contas.map(conta => `
+    <a href="#/dashboard/contas/${conta.id}" class="block">
+      <li class="flex items-center justify-between p-4 border-t border-gray-200 hover:bg-gray-50 transition-colors cursor-pointer">
         <div class="flex items-center gap-4">
           <div class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center font-bold text-gray-600">
             ${conta.instituicao.substring(0, 2).toUpperCase()}
@@ -27,15 +30,16 @@ export function renderAccountsView(objetos) {
           ${conta.saldo.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
         </p>
       </li>
+    </a>
     `).join('');
 
-        return `
+    return `
       <div class="mb-8">
         <div class="flex items-center gap-3 mb-2">
           ${objeto.fotoUrl
-                ? `<img src="${objeto.fotoUrl}" class="w-8 h-8 rounded-full object-cover">`
-                : `<div class="w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 font-bold text-sm">${objeto.nome.substring(0, 2).toUpperCase()}</div>`
-            }
+        ? `<img src="${objeto.fotoUrl}" class="w-8 h-8 rounded-full object-cover">`
+        : `<div class="w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 font-bold text-sm">${objeto.nome.substring(0, 2).toUpperCase()}</div>`
+      }
           <h3 class="text-lg font-bold text-gray-700">${objeto.nome}</h3>
         </div>
         <ul class="bg-white rounded-2xl shadow-md overflow-hidden">
@@ -43,9 +47,9 @@ export function renderAccountsView(objetos) {
         </ul>
       </div>
     `;
-    }).join('');
+  }).join('');
 
-    dashboardContent.innerHTML = `
+  dashboardContent.innerHTML = `
     <div class="p-4 sm:p-6 lg:p-8">
       <div class="sm:flex sm:items-center sm:justify-between mb-8">
         <h2 class="text-3xl font-bold tracking-tight text-gray-900">Todas as Contas</h2>

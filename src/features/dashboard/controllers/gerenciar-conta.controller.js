@@ -1,9 +1,8 @@
-import { GerenciarContaView } from "../views/accounts/gerenciar-conta.view";
-import {
-    getAllObjects,
-    getObjectById,
-    updateObject,
-} from "../../../services/object.service";
+// Em: src/features/dashboard/controllers/gerenciar-conta.controller.js
+
+import { GerenciarContaView } from "../views/accounts/gerenciar-conta.view.js";
+// Importação CORRIGIDA: agora aponta para o seu arquivo de storage
+import { getObjetos, updateObject } from "../../../app/storage/objetos.storage.js";
 import { v4 as uuidv4 } from "uuid";
 
 // Variáveis para guardar o estado atual
@@ -11,12 +10,13 @@ let currentObject;
 let currentAccount;
 let allObjects;
 
-export const GerenciarContaController = (params) => {
+export const initGerenciarConta = (params) => {
     const { id: accountId } = params; // Pega o ID da conta da URL
-    const app = document.getElementById("app");
+    const dashboardContent = document.getElementById("dashboard-content");
+    if (!dashboardContent) return;
 
     // Encontra a conta e seu objeto
-    allObjects = getAllObjects();
+    allObjects = getObjetos(); // Utiliza a função correta
     for (const obj of allObjects) {
         const foundAccount = obj.contas.find(c => c.id === accountId);
         if (foundAccount) {
@@ -27,12 +27,12 @@ export const GerenciarContaController = (params) => {
     }
 
     if (!currentAccount) {
-        app.innerHTML = `<div class="container mx-auto p-8 text-center"><h1 class="text-2xl text-red-500">Conta não encontrada!</h1></div>`;
+        dashboardContent.innerHTML = `<div class="container mx-auto p-8 text-center"><h1 class="text-2xl text-red-500">Conta não encontrada!</h1></div>`;
         return;
     }
 
     // Renderiza a view com os dados encontrados
-    app.innerHTML = GerenciarContaView(currentAccount, currentObject);
+    dashboardContent.innerHTML = GerenciarContaView(currentAccount, currentObject);
     attachEventListeners();
 };
 
@@ -77,7 +77,7 @@ function attachEventListeners() {
     });
 }
 
-// --- Lógica das Ações ---
+// --- Lógica das Ações (agora usando updateObject) ---
 
 function handleEditAccount(e) {
     e.preventDefault();
@@ -87,8 +87,8 @@ function handleEditAccount(e) {
     currentAccount.nome = newName;
     currentAccount.instituicao = newBank;
 
-    updateObject(currentObject.id, currentObject);
-    GerenciarContaController({ id: currentAccount.id }); // Recarrega a view
+    updateObject(currentObject.id, currentObject); // Usa a função correta
+    initGerenciarConta({ id: currentAccount.id }); // Recarrega a view
 }
 
 function handleAddTransaction(e, tipo) {
@@ -112,15 +112,14 @@ function handleAddTransaction(e, tipo) {
 
     currentAccount.transacoes.push(novaTransacao);
 
-    // Atualiza o saldo da conta
     if (tipo === 'receita') {
-        currentAccount.saldoInicial += valor;
+        currentAccount.saldo += valor;
     } else {
-        currentAccount.saldoInicial -= valor;
+        currentAccount.saldo -= valor;
     }
 
-    updateObject(currentObject.id, currentObject);
-    GerenciarContaController({ id: currentAccount.id });
+    updateObject(currentObject.id, currentObject); // Usa a função correta
+    initGerenciarConta({ id: currentAccount.id });
 }
 
 function handleDeleteTransaction(e) {
@@ -128,24 +127,23 @@ function handleDeleteTransaction(e) {
     if (confirm('Tem certeza que deseja excluir esta transação?')) {
         const transacao = currentAccount.transacoes.find(t => t.id === transactionId);
 
-        // Ajusta o saldo antes de remover
         if (transacao.tipo === 'receita') {
-            currentAccount.saldoInicial -= transacao.valor;
+            currentAccount.saldo -= transacao.valor;
         } else {
-            currentAccount.saldoInicial += transacao.valor;
+            currentAccount.saldo += transacao.valor;
         }
 
         currentAccount.transacoes = currentAccount.transacoes.filter(t => t.id !== transactionId);
-        updateObject(currentObject.id, currentObject);
-        GerenciarContaController({ id: currentAccount.id });
+        updateObject(currentObject.id, currentObject); // Usa a função correta
+        initGerenciarConta({ id: currentAccount.id });
     }
 }
 
 function handleDeleteAccount() {
     if (confirm(`Tem certeza que deseja excluir a conta "${currentAccount.nome}"? Esta ação não pode ser desfeita.`)) {
         currentObject.contas = currentObject.contas.filter(c => c.id !== currentAccount.id);
-        updateObject(currentObject.id, currentObject);
-        window.location.hash = `#/objetos/${currentObject.id}`; // Volta para a tela do objeto
+        updateObject(currentObject.id, currentObject); // Usa a função correta
+        window.location.hash = `#/dashboard/objetos/${currentObject.id}`;
     }
 }
 
@@ -158,7 +156,6 @@ function populateTransferModal() {
         destinationObjectSelect.add(option);
     });
 
-    // Inicia o select de contas vazio
     populateDestinationAccounts(null);
 }
 
@@ -171,7 +168,6 @@ function populateDestinationAccounts(objectId) {
 
     const selectedObject = allObjects.find(o => o.id === objectId);
     if (selectedObject) {
-        // Filtra para não mostrar a conta de origem na lista de destino
         const destinationAccounts = selectedObject.contas.filter(c => c.id !== currentAccount.id);
 
         if (destinationAccounts.length > 0) {
@@ -184,7 +180,6 @@ function populateDestinationAccounts(objectId) {
     }
 }
 
-
 function handleTransfer(e) {
     e.preventDefault();
     const valor = parseFloat(document.getElementById('transferValue').value);
@@ -194,12 +189,11 @@ function handleTransfer(e) {
         alert("Por favor, preencha todos os campos corretamente.");
         return;
     }
-    if (valor > currentAccount.saldoInicial) {
+    if (valor > currentAccount.saldo) {
         alert("Saldo insuficiente para realizar a transferência.");
         return;
     }
 
-    // Encontra a conta de destino
     let destinationObject, destinationAccount;
     for (const obj of allObjects) {
         const found = obj.contas.find(c => c.id === destinationAccountId);
@@ -210,34 +204,20 @@ function handleTransfer(e) {
         }
     }
 
-    // Cria as transações de transferência
-    const transferOut = {
-        id: uuidv4(),
-        descricao: `Transferência para ${destinationAccount.nome}`,
-        valor: valor,
-        data: new Date().toISOString().substring(0, 10),
-        tipo: 'despesa'
-    };
-    const transferIn = {
-        id: uuidv4(),
-        descricao: `Transferência de ${currentAccount.nome}`,
-        valor: valor,
-        data: new Date().toISOString().substring(0, 10),
-        tipo: 'receita'
-    };
+    const dataAtual = new Date().toISOString().substring(0, 10);
 
-    // Atualiza a conta de origem
-    currentAccount.saldoInicial -= valor;
+    const transferOut = { id: uuidv4(), descricao: `Transferência para ${destinationAccount.nome}`, valor, data: dataAtual, tipo: 'despesa' };
+    const transferIn = { id: uuidv4(), descricao: `Transferência de ${currentAccount.nome}`, valor, data: dataAtual, tipo: 'receita' };
+
+    currentAccount.saldo -= valor;
     if (!currentAccount.transacoes) currentAccount.transacoes = [];
     currentAccount.transacoes.push(transferOut);
-    updateObject(currentObject.id, currentObject);
+    updateObject(currentObject.id, currentObject); // Usa a função correta
 
-    // Atualiza a conta de destino
-    destinationAccount.saldoInicial += valor;
+    destinationAccount.saldo += valor;
     if (!destinationAccount.transacoes) destinationAccount.transacoes = [];
     destinationAccount.transacoes.push(transferIn);
-    updateObject(destinationObject.id, destinationObject);
+    updateObject(destinationObject.id, destinationObject); // Usa a função correta
 
-    // Recarrega a view para mostrar o estado atualizado
-    GerenciarContaController({ id: currentAccount.id });
+    initGerenciarConta({ id: currentAccount.id });
 }

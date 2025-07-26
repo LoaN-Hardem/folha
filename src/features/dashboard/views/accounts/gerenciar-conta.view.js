@@ -2,10 +2,10 @@ import { formatCurrency } from "../../../../utils/format-currency";
 import { toCapitalize } from "../../../../utils/to-capitalize";
 
 export const GerenciarContaView = (conta, objeto) => {
-    // Inicialmente, as transações podem vir vazias
-    const transacoes = conta.transacoes || [];
+  // Inicialmente, as transações podem vir vazias
+  const transacoes = conta.transacoes || [];
 
-    return `
+  return `
     <div class="container mx-auto p-4 md:p-8">
       <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
         <div>
@@ -23,7 +23,7 @@ export const GerenciarContaView = (conta, objeto) => {
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
         <div class="bg-white p-6 rounded-lg shadow-md col-span-1 md:col-span-1 flex flex-col justify-center">
           <h2 class="text-gray-500 text-lg">Saldo Atual</h2>
-          <p class="text-4xl font-extrabold text-gray-800">${formatCurrency(conta.saldoInicial)}</p>
+          <p class="text-4xl font-extrabold text-gray-800">${formatCurrency(conta.saldo)}</p>
         </div>
         <div class="bg-white p-6 rounded-lg shadow-md col-span-1 md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4">
             <button id="btn-open-receita-modal" class="bg-green-500 text-white w-full h-full py-4 rounded-lg flex items-center justify-center text-lg font-semibold hover:bg-green-600 transition-all">
@@ -50,7 +50,7 @@ export const GerenciarContaView = (conta, objeto) => {
             </thead>
             <tbody id="statement-table-body">
               ${transacoes.length > 0
-            ? transacoes.map(t => `
+      ? transacoes.map(t => `
                       <tr class="border-b">
                         <td class="py-3 px-4 text-gray-700">${t.data}</td>
                         <td class="py-3 px-4 text-gray-700">${toCapitalize(t.descricao)}</td>
@@ -67,12 +67,12 @@ export const GerenciarContaView = (conta, objeto) => {
                         </td>
                       </tr>
                     `).join('')
-            : `
+      : `
                       <tr>
                         <td colspan="5" class="text-center py-10 text-gray-500">Nenhuma transação registrada.</td>
                       </tr>
                     `
-        }
+    }
             </tbody>
           </table>
         </div>
@@ -113,12 +113,12 @@ const ModalEditarConta = (conta) => `
 
 // Componente Reutilizável para Modal de Receita e Despesa
 const ModalAdicionarTransacao = (tipo) => {
-    const isReceita = tipo === 'receita';
-    const title = isReceita ? 'Adicionar Receita' : 'Adicionar Despesa';
-    const modalId = `modal-add-${tipo}`;
-    const formId = `form-add-${tipo}`;
+  const isReceita = tipo === 'receita';
+  const title = isReceita ? 'Adicionar Receita' : 'Adicionar Despesa';
+  const modalId = `modal-add-${tipo}`;
+  const formId = `form-add-${tipo}`;
 
-    return `
+  return `
     <div id="${modalId}" class="fixed inset-0 bg-gray-900 bg-opacity-50 hidden items-center justify-center z-50">
       <div class="bg-white rounded-lg shadow-xl p-8 w-full max-w-md">
         <h2 class="text-2xl font-bold mb-6">${title}</h2>

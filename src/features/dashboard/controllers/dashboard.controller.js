@@ -3,6 +3,7 @@ import { renderDashboardHomeView } from '../views/home/home.view.js';
 import { initObjetos } from '../controllers/objetos.controller.js';
 import { initGerenciarObjeto } from '../controllers/gerenciar-objeto.controller.js';
 import { initAccounts } from '../controllers/accounts.controller.js';
+import { initGerenciarConta } from '../controllers/gerenciar-conta.controller.js';
 
 /**
  * Adiciona a lógica de interatividade do menu, popups, etc.
@@ -104,7 +105,12 @@ export function initDashboard(routeParams = {}) {
   const { view, id } = routeParams;
   let currentView = 'home'; // Padrão é a home
 
-  if (view === 'objetos' && id) {
+
+  // ADICIONE ESTA NOVA CONDIÇÃO AQUI
+  if (view === 'contas' && id) {
+    initGerenciarConta({ id });
+    currentView = 'accounts'; // Mantém o menu "Contas" ativo
+  } else if (view === 'objetos' && id) {
     initGerenciarObjeto({ id });
     currentView = 'objetos';
   } else if (view === 'objetos') {

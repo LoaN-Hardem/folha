@@ -29,18 +29,20 @@ export function renderGerenciarObjetoView(objeto, saldoTotal) {
   // Lógica de contas (simulada por enquanto)
   const contasHtml = objeto.contas && objeto.contas.length > 0
     ? objeto.contas.map(conta => `
-        <li class="flex items-center justify-between p-4 rounded-lg hover:bg-gray-100 transition-colors">
-          <div class="flex items-center gap-4">
-            <div class="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 font-bold">
-              ${conta.instituicao.substring(0, 2).toUpperCase()}
-            </div>
-            <div>
-              <p class="font-bold text-gray-800">${conta.nome}</p>
-              <p class="text-sm text-gray-500">${conta.instituicao}</p>
-            </div>
-          </div>
-          <p class="font-bold text-lg text-gray-800">${conta.saldo.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</p>
-        </li>
+        <a href="#/dashboard/contas/${conta.id}" class="block w-full">
+            <li class="flex items-center justify-between p-4 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer">
+              <div class="flex items-center gap-4">
+                <div class="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 font-bold">
+                  ${conta.instituicao.substring(0, 2).toUpperCase()}
+                </div>
+                <div>
+                  <p class="font-bold text-gray-800">${conta.nome}</p>
+                  <p class="text-sm text-gray-500">${conta.instituicao}</p>
+                </div>
+              </div>
+              <p class="font-bold text-lg text-gray-800">${conta.saldo.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</p>
+            </li>
+        </a>
       `).join('')
     : '<p class="text-gray-500 text-center py-4">Nenhuma conta adicionada ainda.</p>';
 

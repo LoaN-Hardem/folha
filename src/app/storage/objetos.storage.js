@@ -68,3 +68,20 @@ export function addConta(objetoId, dadosConta) {
     objetos[objetoIndex].contas.push(novaConta);
     localStorage.setItem('folha_objetos', JSON.stringify(objetos));
 }
+
+/**
+ * Atualiza um objeto existente no LocalStorage.
+ * @param {string} objetoId - O ID do objeto a ser atualizado.
+ * @param {Object} objetoAtualizado - O objeto com os dados modificados.
+ */
+export function updateObject(objetoId, objetoAtualizado) {
+    const objetos = getObjetos();
+    const index = objetos.findIndex(obj => obj.id === objetoId);
+
+    if (index !== -1) {
+        objetos[index] = objetoAtualizado;
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(objetos));
+    } else {
+        console.error("Objeto não encontrado para atualização.");
+    }
+}
