@@ -3,6 +3,7 @@ import { initHomepage } from '../features/homepage/homepage.controller.js';
 import { initLogin } from '../features/login/login.controller.js';
 import { initDashboard } from '../features/dashboard/controllers/dashboard.controller.js';
 import { initError } from '../features/404/error.controller.js';
+import { GerenciarContaController } from '../features/dashboard/controllers/gerenciar-conta.controller.js';
 
 // Mapa de rotas que o roteador vai usar
 const routes = {
@@ -14,6 +15,8 @@ const routes = {
   // Rota para uma view específica com um ID (ex: /dashboard/objetos/obj_123)
   '/dashboard/:view/:id': initDashboard,
   '/error': initError,
+  path: /^\#\/contas\/([a-zA-Z0-9\-]+)$/, // Expressão regular para #/contas/ID_DA_CONTA
+  controller: GerenciarContaController,
 };
 
 /**
