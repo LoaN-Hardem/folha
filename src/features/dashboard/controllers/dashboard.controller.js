@@ -80,13 +80,15 @@ function addDashboardLogic() {
  * @param {string} currentView - A view atual (ex: 'home', 'objetos').
  */
 function updateActiveNavLink(currentView) {
+  // Primeiro, remove o estado ativo de todos os links
   document.querySelectorAll('.nav-link').forEach(link => {
-    link.classList.remove('bg-gray-700');
+    link.classList.remove('bg-indigo-50', 'text-indigo-600', 'font-semibold');
   });
 
+  // Em seguida, aplica as novas classes ao link ativo
   const activeLink = document.querySelector(`.nav-link[data-view="${currentView}"]`);
   if (activeLink) {
-    activeLink.classList.add('bg-gray-700');
+    activeLink.classList.add('bg-indigo-50', 'text-indigo-600', 'font-semibold');
   }
 }
 

@@ -2,7 +2,7 @@ import { getObjetos, addConta } from '../../../app/storage/objetos.storage.js';
 import { renderAccountsView } from '../views/accounts/accounts.view.js';
 import { getBancos } from '../../../app/services/bank.service.js';
 import { showModal } from '../../../components/modal/modal.js';
-import { initGerenciarObjeto } from './gerenciar-objeto.controller.js';
+import { loadRoute } from '../../../app/router.js';
 
 export function initAccounts() {
   const objetos = getObjetos();
@@ -118,12 +118,7 @@ export async function showAddAccountModal(selectedObjeto = null) {
 
           addConta(selectedObjetoId, dadosConta);
           modal.closeModal();
-
-          if (location.hash.includes('/objetos/')) {
-            initGerenciarObjeto({ id: selectedObjetoId });
-          } else {
-            initAccounts();
-          }
+          loadRoute();
         }
       }
     ]

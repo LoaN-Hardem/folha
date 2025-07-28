@@ -16,7 +16,7 @@ export function renderAccountsView(objetos) {
 
     const contasHtml = objeto.contas.map(conta => `
     <a href="#/dashboard/contas/${conta.id}" class="block">
-      <li class="flex items-center justify-between p-4 border-t border-gray-200 hover:bg-gray-50 transition-colors cursor-pointer">
+      <li class="flex items-center justify-between p-4 border-t border-gray-200 hover:bg-gray-100 transition-colors cursor-pointer">
         <div class="flex items-center gap-4">
           <div class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center font-bold text-gray-600">
             ${conta.instituicao.substring(0, 2).toUpperCase()}
@@ -34,15 +34,17 @@ export function renderAccountsView(objetos) {
     `).join('');
 
     return `
-      <div class="mb-8">
-        <div class="flex items-center gap-3 mb-2">
-          ${objeto.fotoUrl
-        ? `<img src="${objeto.fotoUrl}" class="w-8 h-8 rounded-full object-cover">`
-        : `<div class="w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 font-bold text-sm">${objeto.nome.substring(0, 2).toUpperCase()}</div>`
+      <div class="bg-white rounded-2xl shadow-md mb-8 overflow-hidden">
+        <div class="p-3 bg-indigo-500 border-b">
+            <div class="flex items-center gap-3">
+              ${objeto.fotoUrl
+        ? `<img src="${objeto.fotoUrl}" class="w-12 h-12 rounded-full object-cover">`
+        : `<div class="w-12 h-12 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 font-bold text-sm">${objeto.nome.substring(0, 2).toUpperCase()}</div>`
       }
-          <h3 class="text-lg font-bold text-gray-700">${objeto.nome}</h3>
+              <h3 class="text-lg font-bold text-white">${objeto.nome}</h3>
+            </div>
         </div>
-        <ul class="bg-white rounded-2xl shadow-md overflow-hidden">
+        <ul>
           ${contasHtml}
         </ul>
       </div>
@@ -59,6 +61,8 @@ export function renderAccountsView(objetos) {
           </button>
         </div>
       </div>
+
+      <hr class="division-separator">
 
       <div id="all-accounts-list">
         ${accountsByObjectHtml || '<p class="text-center text-gray-500">Nenhuma conta foi adicionada em nenhum objeto ainda.</p>'}

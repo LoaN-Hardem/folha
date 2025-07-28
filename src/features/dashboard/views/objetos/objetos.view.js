@@ -1,5 +1,5 @@
 import { getObjetos } from '../../../../app/storage/objetos.storage.js';
-
+import { formatCurrency } from '../../../../utils/format-currency.js';
 /**
  * Renderiza a visualização principal para gerenciar Objetos.
  */
@@ -11,7 +11,7 @@ export function renderObjetosView() {
 
   dashboardContent.innerHTML = `
     <div class="p-4 sm:p-6 lg:p-8">
-      <div class="sm:flex sm:items-center sm:justify-between">
+      <div class="sm:flex sm:items-center sm:justify-between mb-8">
         <h2 class="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">Meus Objetos</h2>
         <div class="mt-4 sm:mt-0">
           <button type="button" id="create-objeto-btn" class="block w-full rounded-lg bg-indigo-600 px-5 py-3 text-sm font-medium text-white transition hover:bg-indigo-800 focus:outline-none focus:ring hover:cursor-pointer">
@@ -19,6 +19,8 @@ export function renderObjetosView() {
           </button>
         </div>
       </div>
+
+      <hr class="division-separator">
 
       <div id="objetos-list" class="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
         ${objetos.length > 0 ? objetos.map(objeto => renderObjetoCard(objeto)).join('') : renderEmptyState()}
@@ -35,7 +37,7 @@ export function renderObjetosView() {
 function renderObjetoCard(objeto) {
   // Simulação do saldo total, já que ainda não temos as contas.
   // No futuro, este valor virá de um cálculo real.
-  const saldoTotal = "R$ 0,00";
+  const saldoTotal = objeto.contas.reduce((acc, conta) => acc + conta.saldo, 0);
 
   // Lógica para criar o avatar (foto ou iniciais)
   const avatarHtml = objeto.fotoUrl
@@ -51,12 +53,12 @@ function renderObjetoCard(objeto) {
         </div>
         <h3 class="text-xl font-bold text-gray-900 truncate w-full">${objeto.nome}</h3>
         <div class="my-2">
-        <p class="text-sm text-gray-500">Saldo Total</p>
-        <p class="text-2xl font-bold text-green-600">${saldoTotal}</p>
+          <p class="text-sm text-gray-500">Saldo Total</p>
+          <p class="text-2xl font-bold text-green-600">${formatCurrency(saldoTotal)}</p>
         </div>
         <div class="mt-4 w-full flex flex-col space-y-2">
-         <button class="manage-btn w-full text-white font-semibold text-base bg-indigo-600 hover:bg-indigo-800 py-2 px-4 rounded-lg transition-colors hover:cursor-pointer">Gerenciar</button>
-         <button class="delete-btn w-full text-gray-700 bg-gray-200 hover:bg-gray-300 font-semibold text-base py-2 px-4 rounded-lg transition-colors hover:cursor-pointer">Excluir</button>
+         <button class="manage-btn btn btn-primary">Gerenciar</button>
+         <button class="delete-btn btn btn-secondary">Excluir</button>
         </div>
     </div>
   `;

@@ -27,38 +27,42 @@ export function renderDashboardView() {
     </div>
 
     <div id="sidebar-backdrop" class="hidden md:hidden fixed inset-0 bg-black/50 z-30"></div>
-
-
-      <aside id="sidebar" class="bg-gray-800 text-white w-64 flex-shrink-0 flex flex-col fixed inset-y-0 left-0 transform -translate-x-full md:relative md:translate-x-0 transition-all duration-300 ease-in-out z-40">
+      
+      <aside id="sidebar" class="bg-white w-64 flex-shrink-0 flex flex-col fixed inset-y-0 left-0 transform -translate-x-full md:relative md:translate-x-0 transition-all duration-300 ease-in-out z-40 border-r border-gray-200">
             
-        <div class="flex items-center justify-center h-20 border-b border-gray-700">
-          <a href="#/dashboard" class="text-2xl font-bold text-white flex items-center">
+        <div class="flex items-center justify-center h-20 px-6">
+          <a href="#/dashboard" class="text-2xl font-bold text-gray-800 flex items-center">
             <span class="sidebar-text">Folha</span>
             <span class="text-green-500 ml-2">🍃</span>
           </a>
         </div>
 
+
+        <div class="px-6">
+            <hr class="border-gray-300">
+        </div>
+
         <nav class="flex-grow p-4 space-y-2">
-          <a href="#/dashboard" data-view="home" class="nav-link flex items-center py-2.5 px-4 rounded-lg transition-colors duration-200 hover:bg-gray-700">
+          <a href="#/dashboard" data-view="home" class="nav-link flex items-center py-2.5 px-4 rounded-lg text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 transition-colors duration-200">
             <svg class="w-6 h-6 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
             <span class="sidebar-text ml-4 transition-all duration-200">Dashboard</span>
           </a>
           
-          <a href="#/dashboard/objetos" data-view="objects" class="nav-link flex items-center py-2.5 px-4 rounded-lg transition-colors duration-200 hover:bg-gray-700">
+          <a href="#/dashboard/objetos" data-view="objetos" class="nav-link flex items-center py-2.5 px-4 rounded-lg text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 transition-colors duration-200">
             <svg class="w-6 h-6 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9" />
             </svg>
             <span class="sidebar-text ml-4 transition-all duration-200">Objetos</span>
           </a>
 
-          <a href="#/dashboard/accounts" data-view="accounts" class="nav-link flex items-center py-2.5 px-4 rounded-lg transition-colors duration-200 hover:bg-gray-700">
+          <a href="#/dashboard/accounts" data-view="accounts" class="nav-link flex items-center py-2.5 px-4 rounded-lg text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 transition-colors duration-200">
             <svg class="w-6 h-6 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
             <span class="sidebar-text ml-4 transition-all duration-200">Contas</span>
           </a>
         </nav>
         
-        <div class="p-4 border-t border-gray-700">
-          <a href="#" id="logout-btn" class="flex items-center py-2.5 px-4 rounded-lg hover:bg-gray-700 transition-colors">
+        <div class="p-4 border-t border-gray-100">
+          <a href="#" id="logout-btn" class="flex items-center py-2.5 px-4 rounded-lg text-gray-600 hover:bg-red-50 hover:text-red-600 transition-colors">
             <svg class="w-6 h-6 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
             <span class="sidebar-text ml-4 transition-all duration-200">Sair</span>
           </a>
