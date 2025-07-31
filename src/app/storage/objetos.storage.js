@@ -22,7 +22,8 @@ export function saveObjeto(nome, fotoUrl = null) {
         nome: nome,
         fotoUrl: fotoUrl, // Salva a URL da foto
         contas: [],
-        criadoEm: new Date().toISOString()
+        criadoEm: new Date().toISOString(),
+        themeColor: '#F9FAFB'
     };
 
     objetos.push(novoObjeto);

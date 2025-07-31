@@ -2,6 +2,9 @@ export function renderDashboardHomeView() {
   const dashboardContent = document.getElementById('dashboard-content');
   if (!dashboardContent) return;
 
+  // RESETAR A COR
+  dashboardContent.style.backgroundColor = '';
+
   // Seus dados de simulação permanecem os mesmos
   const totalReceitas = "R$ 1.850,50";
   const totalDespesas = "R$ 480,00";

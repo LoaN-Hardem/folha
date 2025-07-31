@@ -7,6 +7,9 @@ export function renderObjetosView() {
   const dashboardContent = document.getElementById('dashboard-content');
   if (!dashboardContent) return;
 
+  // RESETAR A COR
+  dashboardContent.style.backgroundColor = '';
+
   const objetos = getObjetos();
 
   dashboardContent.innerHTML = `

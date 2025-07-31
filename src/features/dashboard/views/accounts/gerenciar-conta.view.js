@@ -2,6 +2,9 @@ import { formatCurrency } from "../../../../utils/format-currency";
 import { toCapitalize } from "../../../../utils/to-capitalize";
 
 export const GerenciarContaView = (conta, objeto) => {
+  const dashboardContent = document.getElementById('dashboard-content');
+  if (dashboardContent) dashboardContent.style.backgroundColor = '';
+
   // Inicialmente, as transações podem vir vazias
   const transacoes = conta.transacoes || [];
 

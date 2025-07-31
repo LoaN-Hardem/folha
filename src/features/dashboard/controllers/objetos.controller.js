@@ -137,7 +137,7 @@ async function handleSaveObjeto(nomeObjeto, arquivoFoto) {
  * @param {File} file - O arquivo de imagem a ser comprimido.
  * @returns {Promise<string>} Uma Promise que resolve com a URL da imagem comprimida em Base64.
  */
-function compressImage(file) {
+export function compressImage(file) {
     return new Promise((resolve, reject) => {
         const MAX_WIDTH = 800; // Largura máxima da imagem
         const MAX_HEIGHT = 800; // Altura máxima da imagem

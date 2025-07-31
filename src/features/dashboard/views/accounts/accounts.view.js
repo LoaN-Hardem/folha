@@ -6,6 +6,9 @@ export function renderAccountsView(objetos) {
   const dashboardContent = document.getElementById('dashboard-content');
   if (!dashboardContent) return;
 
+  // RESETAR A COR
+  dashboardContent.style.backgroundColor = '';
+
   const accountsByObjectHtml = objetos.map(objeto => {
     // Se um objeto não tiver contas, não o exibimos na lista.
     if (!objeto.contas || objeto.contas.length === 0) {
