@@ -23,9 +23,9 @@ export function showModal({ title, content, actions = [] }) {
 
     // Mapeia os botões de ação para HTML
     const actionsHtml = actions.map(action => {
-        let buttonClass = 'w-full px-4 py-3 font-bold rounded-lg transition-colors sm:w-auto ';
+        let buttonClass = 'w-full px-4 py-3 font-bold rounded-lg transition-colors sm:w-auto cursor-pointer ';
         if (action.type === 'primary') {
-            buttonClass += 'text-white bg-indigo-600 hover:bg-indigo-700';
+            buttonClass += 'text-white bg-indigo-600 hover:bg-indigo-800';
         } else if (action.type === 'danger') {
             buttonClass += 'text-white bg-red-600 hover:bg-red-700';
         } else { // secondary

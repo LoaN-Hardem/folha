@@ -59,7 +59,7 @@ export function renderAccountsView(objetos) {
       <div class="sm:flex sm:items-center sm:justify-between mb-8">
         <h2 class="text-3xl font-bold tracking-tight text-gray-900">Todas as Contas</h2>
         <div class="mt-4 sm:mt-0">
-          <button type="button" id="add-account-btn" class="block w-full rounded-lg bg-indigo-600 px-5 py-3 text-sm font-medium text-white transition hover:bg-indigo-700">
+          <button type="button" id="add-account-btn" class="block w-full rounded-lg bg-indigo-600 px-5 py-3 text-sm font-medium text-white transition hover:bg-indigo-700 cursor-pointer">
             Adicionar Nova Conta
           </button>
         </div>

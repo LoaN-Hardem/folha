@@ -36,7 +36,7 @@ function addDashboardLogic() {
     sidebar.classList.toggle('w-20');
     sidebar.classList.toggle('w-64');
     document.querySelectorAll('.sidebar-text').forEach(text => {
-      text.classList.toggle('opacity-0');
+      text.classList.toggle('hidden');
       setTimeout(() => text.classList.toggle('invisible'), 150);
     });
   });
